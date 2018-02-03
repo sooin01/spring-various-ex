@@ -18,12 +18,12 @@ public class CommandController {
 	@Autowired
 	private CommandService commandService;
 
-	@GetMapping(value = "/cli/index")
+	@GetMapping(value = "/command/index")
 	public String index() {
-		return "cli/index";
+		return "command/index";
 	}
 
-	@PostMapping(value = "/cli/command")
+	@PostMapping(value = "/command")
 	public ResponseEntity<String> command(HttpSession session, @RequestBody String command) {
 		SessionVo sessionVo = commandService.command(session, command);
 		String response = sessionVo.getResponse();

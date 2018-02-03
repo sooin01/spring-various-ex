@@ -11,7 +11,7 @@
 $(function() {
     $('body').terminal(function(command, term) {
     	term.pause();
-        $.post('/cli/command', {command: command}).then(function(data) {
+        $.post('/command', {command: command}).then(function(data) {
         	term.echo('').resume();;
         	term.set_prompt(data);
         });
