@@ -6,21 +6,27 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 
-import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.my.app.command.handler.ChannelHandler;
+import com.my.app.command.vo.ConnectionInfoVo;
 import com.my.app.command.vo.SessionVo;
 
 @Service
 public class CommandService {
 
+	public SessionVo connect(HttpSession session, ConnectionInfoVo connectionInfoVo) {
+		SessionVo sessionVo = getCliVo(connectionInfoVo);
+		session.setAttribute("sessionVo", sessionVo);
+		return sessionVo;
+	}
+
 	public SessionVo command(HttpSession session, String command) {
 		SessionVo sessionVo = (SessionVo) session.getAttribute("sessionVo");
 
 		if (sessionVo == null) {
-			sessionVo = getCliVo();
-			session.setAttribute("sessionVo", sessionVo);
+			throw new RuntimeException("Session not found.");
 		}
 
 		try {
@@ -29,24 +35,30 @@ public class CommandService {
 			sessionVo.getOs().write(command.concat("\n").getBytes());
 			sessionVo.getOs().flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException("Session write fail.");
 		}
 
 		return sessionVo;
 	}
 
-	public SessionVo getCliVo() {
+	private SessionVo getCliVo(ConnectionInfoVo connectionInfoVo) {
+		String host = connectionInfoVo.getHost();
+		int port = connectionInfoVo.getPort();
+		String username = connectionInfoVo.getUsername();
+		String password = connectionInfoVo.getPassword();
+
 		try {
 			JSch jsch = new JSch();
-			Session session = jsch.getSession("stack", "192.168.1.30", 22);
-			session.setPassword("admin123");
+			Session session = jsch.getSession(username, host, port);
+			session.setPassword(password);
 			session.setConfig("StrictHostKeyChecking", "no");
 			session.connect(5000);
 
-			Channel channel = session.openChannel("shell");
+			ChannelShell channel = (ChannelShell) session.openChannel("shell");
 			channel.setInputStream(null);
 			ChannelHandler channelHandler = new ChannelHandler(channel);
 			channelHandler.start();
+			channel.setPtyType("dumb");
 			channel.connect(5000);
 
 			SessionVo sessionVo = new SessionVo();

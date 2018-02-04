@@ -8,7 +8,7 @@ public class ChannelHandler extends Thread {
 
 	private Channel channel;
 
-	private String response;
+	private StringBuilder sb = new StringBuilder();
 
 	private Object lock = new Object();
 
@@ -24,6 +24,8 @@ public class ChannelHandler extends Thread {
 			}
 		}
 
+		String response = sb.toString();
+		sb.setLength(0);
 		return response;
 	}
 
@@ -40,9 +42,12 @@ public class ChannelHandler extends Thread {
 						break;
 					}
 
-					this.response = new String(b, 0, i);
-					System.out.println("response: [" + response + "]");
+					String str = new String(b, 0, i);
+					System.out.println("response -> [" + str + "]");
+					sb.append(str);
+				}
 
+				if (sb.length() > 0) {
 					synchronized (lock) {
 						lock.notify();
 					}
