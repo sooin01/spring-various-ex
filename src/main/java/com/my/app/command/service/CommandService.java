@@ -58,7 +58,7 @@ public class CommandService {
 			channel.setInputStream(null);
 			ChannelHandler channelHandler = new ChannelHandler(channel);
 			channelHandler.start();
-			channel.setPtyType("dumb");
+			channel.setPtyType("xterm");
 			channel.connect(5000);
 
 			SessionVo sessionVo = new SessionVo();
