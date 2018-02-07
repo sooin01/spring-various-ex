@@ -21,7 +21,7 @@ function connect() {
 	
 	$.post('/command/connect', data, function(data) {
 		$('#connect').hide();
-		terminal(data);
+		terminal2(data);
 	});
 }
 
@@ -42,22 +42,52 @@ function terminal(val) {
 }
 
 function terminal2(val) {
-	var term = new Terminal();
+	var term = new Terminal({
+		cursorBlink: true
+	});
 	term.open(document.getElementById('terminal'));
-    term.write(val);
-    
-    var command = 'ls -al';
-    $.post('/command/write', {command: command}).then(function(data) {
-    	term.write(data);
-    });
+	term.write(val);
+	term.focus();
+
+	var commands = [];
+	term.textarea.onkeydown = function (e) {
+		console.log('User pressed key with keyCode: ', e.keyCode);
+		
+		if (e.keyCode == 13) {
+			var command = commands.join('');
+			commands = [];
+		    $.post('/command/write', {command: command}).then(function(data) {
+		    	term.write(data);
+		    	term.focus();
+		    	
+		    	var shellprompt = '$ ';
+
+		    	  term.prompt = function () {
+		    	    term.write('\r\n' + shellprompt);
+		    	  };
+		    });
+		} else if (e.keyCode == 8) {
+			if (commands.length > 0) {
+				commands.splice(commands.length - 1, 1);
+				term.write('\b \b');
+			}
+		} else if (e.keyCode == 9) {
+			
+		} else if (e.keyCode == 16) {
+			
+		} else {
+			commands.push(e.key);
+			term.write(e.key);
+		}
+   	}
 }
 </script>
 </head>
-<body>
+<body onload="connect();">
 
 <input type="button" id="connect" value="접속" onclick="connect();" />
 
-<!-- <div id="terminal"></div> -->
+<div id="terminal"></div>
 
 </body>
 </html>
