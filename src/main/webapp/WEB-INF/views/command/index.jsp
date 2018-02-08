@@ -8,14 +8,18 @@
 <script src="/resources/js/jquery.terminal/jquery.terminal.min.js"></script>
 <script src="/resources/js/jquery.terminal/unix_formatting.js"></script>
 <script src="/resources/js/xterm/xterm.js"></script>
+<script src="/resources/js/xterm/dist/addons/attach/attach.js"></script>
+<script src="/resources/js/xterm/dist/addons/fit/fit.js"></script>
+<script src="/resources/js/xterm/dist/addons/winptyCompat/winptyCompat.js"></script>
+<script src="/resources/js/terminal.js"></script>
 <link href="/resources/js/jquery.terminal/jquery.terminal.min.css" rel="stylesheet"/>
 <link href="/resources/js/xterm/xterm.css" rel="stylesheet" />
 <script>
 function connect() {
 	var data = {
-		host: "192.168.1.30",
+		host: "192.168.1.10",
 		port: 22,
-		username: "stack",
+		username: "root",
 		password: "admin123"
 	};
 	
@@ -41,49 +45,30 @@ function terminal(val) {
     });
 }
 
-function terminal2(val) {
-	var term = new Terminal({
-		cursorBlink: true
-	});
-	term.open(document.getElementById('terminal'));
-	term.write(val);
-	term.focus();
-
-	var commands = [];
-	term.textarea.onkeydown = function (e) {
-		console.log('User pressed key with keyCode: ', e.keyCode);
-		
-		if (e.keyCode == 13) {
-			var command = commands.join('');
-			commands = [];
-		    $.post('/command/write', {command: command}).then(function(data) {
-		    	term.write(data);
-		    	term.focus();
-		    	
-		    	var shellprompt = '$ ';
-
-		    	  term.prompt = function () {
-		    	    term.write('\r\n' + shellprompt);
-		    	  };
-		    });
-		} else if (e.keyCode == 8) {
-			if (commands.length > 0) {
-				commands.splice(commands.length - 1, 1);
-				term.write('\b \b');
-			}
-		} else if (e.keyCode == 9) {
-			
-		} else if (e.keyCode == 16) {
-			
-		} else {
-			commands.push(e.key);
-			term.write(e.key);
-		}
-   	}
-}
+$(function() {
+	/*
+	var ws = new WebSocket("ws://localhost:8080/ws/command");
+	
+	ws.onopen = function() {
+       ws.send("Message to send");
+       console.log("Message is sent...");
+    };
+    
+    ws.onmessage = function (evt) {
+       var received_msg = evt.data;
+       console.log("Message is received...");
+    };
+    
+    ws.onclose = function()
+    { 
+       console.log("Connection is closed..."); 
+    };
+    */
+    connect();
+});
 </script>
 </head>
-<body onload="connect();">
+<body>
 
 <input type="button" id="connect" value="접속" onclick="connect();" />
 
