@@ -8,9 +8,9 @@
 <script src="/resources/js/jquery.terminal/jquery.terminal.min.js"></script>
 <script src="/resources/js/jquery.terminal/unix_formatting.js"></script>
 <script src="/resources/js/xterm/xterm.js"></script>
-<script src="/resources/js/xterm/dist/addons/attach/attach.js"></script>
-<script src="/resources/js/xterm/dist/addons/fit/fit.js"></script>
-<script src="/resources/js/xterm/dist/addons/winptyCompat/winptyCompat.js"></script>
+<script src="/resources/js/xterm/addons/attach/attach.js"></script>
+<script src="/resources/js/xterm/addons/fit/fit.js"></script>
+<script src="/resources/js/xterm/addons/winptyCompat/winptyCompat.js"></script>
 <script src="/resources/js/terminal.js"></script>
 <link href="/resources/js/jquery.terminal/jquery.terminal.min.css" rel="stylesheet"/>
 <link href="/resources/js/xterm/xterm.css" rel="stylesheet" />

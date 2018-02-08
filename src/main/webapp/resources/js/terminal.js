@@ -17,35 +17,30 @@ function terminal2(val) {
 	term.winptyCompatInit();
 	term.fit();
 	term.focus();
+	
 	var commands = [];
-	term.textarea.onkeydown = function (e) {
-		console.log('User pressed key with keyCode: ', e.keyCode);
-		
-		if (e.keyCode == 13) {
-			var command = commands.join('');
+	term.on('key', function (key, ev) {
+		var printable = (!ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey);
+
+	    if (ev.keyCode == 13) {
+	    	var command = commands.join('');
 			commands = [];
-		    $.post('/command/write', {command: command}).then(function(data) {
+	    	$.post('/command/write', {command: command}).then(function(data) {
 		    	term.write(data);
 		    	term.focus();
-		    	
-		    	var shellprompt = '$ ';
-
-		    	  term.prompt = function () {
-		    	    term.write('\r\n' + shellprompt);
-		    	  };
 		    });
-		} else if (e.keyCode == 8) {
-			if (commands.length > 0) {
+	    } else if (ev.keyCode == 8) {
+	    	if (commands.length > 0) {
 				commands.splice(commands.length - 1, 1);
 				term.write('\b \b');
 			}
-		} else if (e.keyCode == 9) {
-			
-		} else if (e.keyCode == 16) {
-			
-		} else {
-			commands.push(e.key);
-			term.write(e.key);
-		}
-   	};
+	    } else if (printable) {
+	    	commands.push(ev.key);
+			term.write(ev.key);
+	    }
+	});
+	
+	term.on('paste', function (data, ev) {
+		term.write(data);
+	});
 }
