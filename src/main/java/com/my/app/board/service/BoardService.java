@@ -7,8 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.my.app.board.common.dao.CommonDao;
 import com.my.app.board.vo.BoardVo;
+import com.my.app.common.dao.CommonDao;
 
 @Service
 public class BoardService {
