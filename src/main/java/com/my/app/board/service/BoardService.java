@@ -16,6 +16,10 @@ public class BoardService {
 	@Autowired
 	private CommonDao commonDao;
 
+	public int insertBoard(BoardVo boardVo) {
+		return commonDao.insert("board.insertBoard", boardVo);
+	}
+
 	public List<BoardVo> getBoardList() {
 		return commonDao.selectList("board.getBoard");
 	}

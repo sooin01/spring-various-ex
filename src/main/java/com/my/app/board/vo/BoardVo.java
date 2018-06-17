@@ -8,7 +8,7 @@ public class BoardVo {
 	private String title;
 	private String content;
 	private String userId;
-	private Boolean deleteYn;
+	private Boolean isDelete;
 	private Timestamp createDt;
 	private Timestamp updateDt;
 
@@ -44,12 +44,12 @@ public class BoardVo {
 		this.userId = userId;
 	}
 
-	public Boolean getDeleteYn() {
-		return deleteYn;
+	public Boolean getIsDelete() {
+		return isDelete;
 	}
 
-	public void setDeleteYn(Boolean deleteYn) {
-		this.deleteYn = deleteYn;
+	public void setIsDelete(Boolean isDelete) {
+		this.isDelete = isDelete;
 	}
 
 	public Timestamp getCreateDt() {

@@ -6,27 +6,12 @@ import com.jcraft.jsch.Channel;
 
 public class ChannelHandler extends Thread {
 
+	private WsCommandHandler wsCommandHandler;
 	private Channel channel;
 
-	private StringBuilder sb = new StringBuilder();
-
-	private Object lock = new Object();
-
-	public ChannelHandler(Channel channel) {
+	public ChannelHandler(WsCommandHandler wsCommandHandler, Channel channel) {
+		this.wsCommandHandler = wsCommandHandler;
 		this.channel = channel;
-	}
-
-	public String getResponse() {
-		synchronized (lock) {
-			try {
-				lock.wait();
-			} catch (InterruptedException e) {
-			}
-		}
-
-		String response = sb.toString();
-		sb.setLength(0);
-		return response;
 	}
 
 	@Override
@@ -44,13 +29,7 @@ public class ChannelHandler extends Thread {
 
 					String str = new String(b, 0, i);
 					System.out.println("response -> [" + str + "]");
-					sb.append(str);
-				}
-
-				if (sb.length() > 0) {
-					synchronized (lock) {
-						lock.notify();
-					}
+					wsCommandHandler.sendClient(str);
 				}
 
 				if (channel.isClosed()) {

@@ -45,8 +45,4 @@ public class SessionVo {
 		this.os = os;
 	}
 
-	public String getResponse() {
-		return channelHandler.getResponse();
-	}
-
 }

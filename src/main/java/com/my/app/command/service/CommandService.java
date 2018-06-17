@@ -4,17 +4,22 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.my.app.command.handler.ChannelHandler;
+import com.my.app.command.handler.WsCommandHandler;
 import com.my.app.command.vo.ConnectionInfoVo;
 import com.my.app.command.vo.SessionVo;
 
 @Service
 public class CommandService {
+
+	@Autowired
+	private WsCommandHandler wsCommandHandler;
 
 	public SessionVo connect(HttpSession session, ConnectionInfoVo connectionInfoVo) {
 		SessionVo sessionVo = getCliVo(connectionInfoVo);
@@ -56,7 +61,7 @@ public class CommandService {
 
 			ChannelShell channel = (ChannelShell) session.openChannel("shell");
 			channel.setInputStream(null);
-			ChannelHandler channelHandler = new ChannelHandler(channel);
+			ChannelHandler channelHandler = new ChannelHandler(wsCommandHandler, channel);
 			channelHandler.start();
 			channel.setPtyType("xterm");
 			channel.connect(5000);

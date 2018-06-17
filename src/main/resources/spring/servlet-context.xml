@@ -9,7 +9,17 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<mvc:annotation-driven />
+	<bean id="jsonUtil" class="com.my.app.common.util.JsonUtil" />
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper">
+					<bean factory-bean="jsonUtil" factory-method="build" />
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
@@ -30,8 +40,6 @@
 	<websocket:handlers>
 		<websocket:mapping handler="wsCommandHandler" path="/ws/command" />
 	</websocket:handlers>
-	
-	<bean id="wsCommandHandler" class="com.my.app.command.handler.WsCommandHandler" />
 	
 	<mvc:interceptors>
 		<mvc:interceptor>

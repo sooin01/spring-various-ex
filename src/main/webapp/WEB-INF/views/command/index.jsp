@@ -4,9 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <script src="/resources/js/jquery.terminal/jquery-1.7.1.min.js"></script>
-<script src="/resources/js/jquery.terminal/jquery.mousewheel-min.js"></script>
-<script src="/resources/js/jquery.terminal/jquery.terminal.min.js"></script>
-<script src="/resources/js/jquery.terminal/unix_formatting.js"></script>
 <script src="/resources/js/xterm/xterm.js"></script>
 <script src="/resources/js/xterm/addons/attach/attach.js"></script>
 <script src="/resources/js/xterm/addons/fit/fit.js"></script>
@@ -17,53 +14,19 @@
 <script>
 function connect() {
 	var data = {
-		host: "192.168.1.10",
+		host: "192.168.1.29",
 		port: 22,
-		username: "root",
+		username: "stack",
 		password: "admin123"
 	};
 	
 	$.post('/command/connect', data, function(data) {
 		$('#connect').hide();
-		terminal2(data);
+		terminal();
 	});
 }
 
-function terminal(val) {
-	$('body').terminal(function(command, term) {
-    	term.pause();
-        $.post('/command/write', {command: command}).then(function(data) {
-        	term.echo('').resume();
-        	term.set_prompt($.terminal.from_ansi(data));
-        });
-    }, {
-        greetings: 'Web CLI Emulator',
-        onBlur: function() {
-            return false;
-        },
-        prompt: val
-    });
-}
-
 $(function() {
-	/*
-	var ws = new WebSocket("ws://localhost:8080/ws/command");
-	
-	ws.onopen = function() {
-       ws.send("Message to send");
-       console.log("Message is sent...");
-    };
-    
-    ws.onmessage = function (evt) {
-       var received_msg = evt.data;
-       console.log("Message is received...");
-    };
-    
-    ws.onclose = function()
-    { 
-       console.log("Connection is closed..."); 
-    };
-    */
     connect();
 });
 </script>

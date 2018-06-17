@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.my.app.command.service.CommandService;
 import com.my.app.command.vo.ConnectionInfoVo;
-import com.my.app.command.vo.SessionVo;
 
 @Controller
 public class CommandController {
@@ -23,18 +22,21 @@ public class CommandController {
 		return "command/index";
 	}
 
+	@GetMapping(value = "/command/index2")
+	public String index2() {
+		return "command/index2";
+	}
+
 	@PostMapping(value = "/command/connect")
-	public ResponseEntity<String> connect(HttpSession session, ConnectionInfoVo connectionInfoVo) {
-		SessionVo sessionVo = commandService.connect(session, connectionInfoVo);
-		String response = sessionVo.getResponse();
-		return ResponseEntity.ok(response);
+	public ResponseEntity<Void> connect(HttpSession session, ConnectionInfoVo connectionInfoVo) {
+		commandService.connect(session, connectionInfoVo);
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping(value = "/command/write")
-	public ResponseEntity<String> command(HttpSession session, String command) {
-		SessionVo sessionVo = commandService.command(session, command);
-		String response = sessionVo.getResponse();
-		return ResponseEntity.ok(response);
+	public ResponseEntity<Void> command(HttpSession session, String command) {
+		commandService.command(session, command);
+		return ResponseEntity.ok().build();
 	}
 
 }

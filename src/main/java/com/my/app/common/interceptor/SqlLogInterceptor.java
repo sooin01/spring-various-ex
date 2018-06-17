@@ -32,7 +32,7 @@ public class SqlLogInterceptor implements Interceptor {
 		MappedStatement ms = (MappedStatement) args[0];
 		BoundSql boundSql = ms.getBoundSql(args[1]);
 		String sql = boundSql.getSql().replaceAll("\\s+", " ");
-		StringBuilder sb = new StringBuilder(sql);
+		StringBuilder sb = new StringBuilder();
 
 		// 파라미터 처리
 		Object parameterObject = boundSql.getParameterObject();
@@ -56,18 +56,29 @@ public class SqlLogInterceptor implements Interceptor {
 			}
 
 			if (parameters.size() > 0) {
-				for (Object parameter : parameters) {
-					int indexOf = sb.indexOf("?");
+				String[] sqlSplit = sql.split("\\?");
+
+				for (int i = 0; i < parameters.size(); i++) {
+					Object parameter = parameters.get(i);
+					String value = null;
 
 					if (parameter == null) {
-						sb.replace(indexOf, indexOf + 1, "NULL");
+						value = "NULL";
 					} else if (parameter instanceof String) {
-						sb.replace(indexOf, indexOf + 1, "'" + parameter.toString() + "'");
+						value = "'" + parameter.toString() + "'";
 					} else {
-						sb.replace(indexOf, indexOf + 1, parameter.toString());
+						value = parameter.toString();
 					}
+
+					sb.append(sqlSplit[i]).append(value);
 				}
+
+				sb.append(sqlSplit[sqlSplit.length - 1]);
+			} else {
+				sb.append(sql);
 			}
+		} else {
+			sb.append(sql);
 		}
 
 		// SQL 실행
