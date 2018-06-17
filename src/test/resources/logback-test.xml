@@ -27,7 +27,7 @@
 	<logger name="com.zaxxer.hikari" level="info" />
 	
 	<logger name="log4jdbc.log4j2" level="error" additivity="false">
-		<appender-ref ref="Console" />
+		<appender-ref ref="STDOUT" />
 	</logger>
 	
 	<Logger name="jdbc.sqlonly" level="off" />

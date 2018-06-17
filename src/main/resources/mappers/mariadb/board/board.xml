@@ -3,8 +3,11 @@
 <mapper namespace="board">
 
 	<insert id="insertBoard" parameterType="com.my.app.board.vo.BoardVo">
-		insert into board (title, content, user_id)
-		values (#{title}, #{content}, #{userId});
+		insert into board (
+			title, content, user_id
+		) values (
+			#{title}, #{content}, #{userId}
+		)
 	</insert>
 
 	<select id="getBoard" resultType="com.my.app.board.vo.BoardVo">
