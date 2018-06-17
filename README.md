@@ -32,16 +32,13 @@ log4jdbc.dump.sql.maxlinelength=0 # 공백 허용
 ```
 <logger name="mybatis.sql" level="info" />
 
-<logger name="log4jdbc.log4j2" level="error" additivity="false">
-	<appender-ref ref="STDOUT" />
-</logger>
-
-<Logger name="jdbc.sqlonly" level="off" />
-<Logger name="jdbc.sqltiming" level="info" />
-<Logger name="jdbc.audit" level="off" />
-<Logger name="jdbc.resultset" level="off" />
-<Logger name="jdbc.resultsettable" level="info" />
-<Logger name="jdbc.connection" level="off" />
+<logger name="log4jdbc.log4j2" level="error" />
+<logger name="jdbc.sqlonly" level="off" />
+<logger name="jdbc.sqltiming" level="info" />
+<logger name="jdbc.audit" level="off" />
+<logger name="jdbc.resultset" level="off" />
+<logger name="jdbc.resultsettable" level="info" />
+<logger name="jdbc.connection" level="off" />
 ```
 
 > mybatis-config.xml 파일에 interceptor 설정 주석 처리
