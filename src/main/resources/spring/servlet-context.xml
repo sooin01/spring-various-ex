@@ -41,6 +41,13 @@
 		<websocket:mapping handler="wsCommandHandler" path="/ws/command" />
 	</websocket:handlers>
 	
+	<websocket:message-broker application-destination-prefix="/app">
+	    <websocket:stomp-endpoint path="/stomp">
+	        <websocket:sockjs />
+	    </websocket:stomp-endpoint>
+	    <websocket:simple-broker prefix="/topic" />
+	</websocket:message-broker>
+	
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
