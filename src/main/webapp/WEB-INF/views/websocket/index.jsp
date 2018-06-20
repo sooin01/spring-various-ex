@@ -28,6 +28,10 @@ function disconnect() {
 function messageSend() {
     stompClient.send("/app/websocket/test1", {}, $('#message').val());
 }
+
+socket.onclose = function() {
+    console.log('close');
+};
 </script>
 </head>
 <body>
