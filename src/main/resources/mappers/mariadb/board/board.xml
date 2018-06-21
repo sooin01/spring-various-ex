@@ -10,7 +10,7 @@
 		)
 	</insert>
 
-	<select id="getBoard" resultType="com.my.app.board.vo.BoardVo">
+	<select id="getBoard" parameterType="map" resultType="com.my.app.board.vo.BoardVo">
 		select seq,
 		       title,
 			   user_id,
@@ -18,6 +18,11 @@
 			   create_dt,
 			   update_dt
 		from board
+		<where>
+			<if test="seq != null">
+				seq = #{seq}
+			</if>
+		</where>
 	</select>
 
 </mapper>

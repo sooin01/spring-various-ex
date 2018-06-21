@@ -24,9 +24,9 @@ public class BoardService {
 		return commonDao.selectList("board.getBoard");
 	}
 
-	public BoardVo getBoard(Integer id) {
+	public BoardVo getBoard(Integer seq) {
 		Map<String, Object> parameterMap = new HashMap<>();
-		parameterMap.put("id", id);
+		parameterMap.put("seq", seq);
 		return commonDao.selectOne("board.getBoard", parameterMap);
 	}
 

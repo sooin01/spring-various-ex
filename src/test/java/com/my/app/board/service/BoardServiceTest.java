@@ -18,10 +18,20 @@ public class BoardServiceTest {
 	@Test
 	public void testInsertBoard() {
 		BoardVo boardVo = new BoardVo();
-		boardVo.setTitle("테스트 제목");
-		boardVo.setContent("테스트 내용");
+		boardVo.setTitle("테스트? 제목");
+		boardVo.setContent("테스트? 내용");
 		boardVo.setUserId("test");
 		boardService.insertBoard(boardVo);
+	}
+
+	@Test
+	public void testGetBoardList() {
+		boardService.getBoardList();
+	}
+
+	@Test
+	public void testGetBoard() {
+		boardService.getBoard(1);
 	}
 
 }

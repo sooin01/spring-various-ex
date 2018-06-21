@@ -1,9 +1,13 @@
 package com.my.app.common.interceptor;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.ibatis.executor.Executor;
@@ -31,8 +35,8 @@ public class SqlLogInterceptor implements Interceptor {
 		Object[] args = invocation.getArgs();
 		MappedStatement ms = (MappedStatement) args[0];
 		BoundSql boundSql = ms.getBoundSql(args[1]);
-		String sql = boundSql.getSql().replaceAll("\\s+", " ");
-		StringBuilder sb = new StringBuilder();
+		// String sql = boundSql.getSql().replaceAll("\\s+", " "); // 공백 제거
+		StringBuilder sql = new StringBuilder(boundSql.getSql());
 
 		// 파라미터 처리
 		Object parameterObject = boundSql.getParameterObject();
@@ -55,35 +59,44 @@ public class SqlLogInterceptor implements Interceptor {
 				}
 			}
 
-			if (parameters.size() > 0) {
-				String[] sqlSplit = sql.split("\\?");
+			Map<Integer, Integer> map = new LinkedHashMap<>();
+			Pattern pattern = Pattern.compile("\\?");
+			Matcher matcher = pattern.matcher(sql);
+			while (matcher.find()) {
+				map.put(matcher.start(), matcher.end());
+			}
 
-				for (int i = 0; i < parameters.size(); i++) {
-					Object parameter = parameters.get(i);
-					String value = null;
+			List<Integer> keys = new ArrayList<>(map.keySet());
+			for (int i = keys.size() - 1; i >= 0; i--) {
+				int start = keys.get(i).intValue();
+				int end = map.get(start).intValue();
 
-					if (parameter == null) {
-						value = "NULL";
-					} else if (parameter instanceof String) {
-						value = "'" + parameter.toString() + "'";
-					} else {
-						value = parameter.toString();
-					}
+				Object parameter = parameters.get(i);
+				String value = null;
 
-					sb.append(sqlSplit[i]).append(value);
+				if (parameter == null) {
+					value = "NULL";
+				} else if (parameter instanceof String) {
+					value = "'" + parameter.toString() + "'";
+				} else {
+					value = parameter.toString();
 				}
 
-				sb.append(sqlSplit[sqlSplit.length - 1]);
-			} else {
-				sb.append(sql);
+				sql.replace(start, end, value);
 			}
-		} else {
-			sb.append(sql);
 		}
 
 		// SQL 실행
 		long start = System.nanoTime();
-		Object proceed = invocation.proceed();
+		Object proceed = null;
+
+		try {
+			proceed = invocation.proceed();
+		} catch (Exception e) {
+			LoggerFactory.getLogger(ms.getId()).info(sql.toString());
+			throw e;
+		}
+
 		long end = System.nanoTime();
 
 		// SQL 로깅
@@ -97,9 +110,8 @@ public class SqlLogInterceptor implements Interceptor {
 		executed.append(", ");
 		executed.append("executed ").append(TimeUnit.NANOSECONDS.toMillis(end - start)).append(" ms")
 				.append(System.lineSeparator()).append("/* ").append(ms.getId()).append(" */")
-				.append(System.lineSeparator());
-		String bindingSql = sb.insert(0, executed).toString();
-		LoggerFactory.getLogger(ms.getId()).info(bindingSql);
+				.append(System.lineSeparator()).append(sql);
+		LoggerFactory.getLogger(ms.getId()).info(executed.toString());
 
 		return proceed;
 	}
