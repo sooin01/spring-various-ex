@@ -98,19 +98,23 @@ public class SqlLogInterceptor implements Interceptor {
 		}
 
 		long end = System.nanoTime();
+		Object count = null;
+		if (proceed instanceof List)
+		{
+		    count = ((List<?>) proceed).size();
+		} else
+		{
+		    count = proceed;
+		}
 
 		// SQL 로깅
 		StringBuilder executed = new StringBuilder();
-		executed.append("sql count: ");
-		if (proceed instanceof List) {
-			executed.append(((List<?>) proceed).size());
-		} else {
-			executed.append(proceed);
-		}
-		executed.append(", ");
-		executed.append("executed ").append(TimeUnit.NANOSECONDS.toMillis(end - start)).append(" ms")
-				.append(System.lineSeparator()).append("/* ").append(ms.getId()).append(" */")
-				.append(System.lineSeparator()).append(sql);
+		executed.append("/* ").append(ms.getId()).append(" */");
+		executed.append(System.lineSeparator());
+		executed.append("==> Query: ").append(sql);
+		executed.append(System.lineSeparator());
+		executed.append("<== Count: ").append(count).append(" (").append("executed ")
+		    .append(TimeUnit.NANOSECONDS.toMillis(end - start)).append(" ms)");
 		LoggerFactory.getLogger(ms.getId()).info(executed.toString());
 
 		return proceed;
