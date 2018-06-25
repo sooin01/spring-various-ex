@@ -6,6 +6,7 @@
 <script src="/resources/js/jquery.terminal/jquery-1.7.1.min.js"></script>
 <script type="text/javascript">
 	function aaa(callback) {
+		$.ajaxSetup({async: false});
 		$.ajax({
 			url: '/aaa',
 			data: 'get',
