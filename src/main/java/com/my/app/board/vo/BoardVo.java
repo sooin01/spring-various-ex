@@ -16,10 +16,9 @@ public class BoardVo {
 
 	}
 
-	public BoardVo(String title, String content, String userId) {
+	public BoardVo(String title, String content) {
 		this.title = title;
 		this.content = content;
-		this.userId = userId;
 	}
 
 	public Integer getSeq() {

@@ -8,8 +8,8 @@
 		<setting name="logPrefix" value="mybatis.sql." />
 	</settings>
 
-	<plugins>
+	<!-- <plugins>
 		<plugin interceptor="com.my.app.common.interceptor.SqlLogInterceptor" />
-	</plugins>
+	</plugins> -->
 
 </configuration>

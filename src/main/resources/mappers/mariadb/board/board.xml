@@ -10,11 +10,11 @@
 		)
 	</insert>
 	
-	<insert id="insertBoardBulk" parameterType="list">
+	<insert id="insertBoardBulk" parameterType="com.my.app.board.vo.BoardWrapperVo">
 		insert into board ( title, content, user_id )
 		values
-		<foreach collection="list" item="item" index="index" separator=",">
-			( #{item.title}, #{item.content}, #{item.userId} )
+		<foreach collection="boardVos" item="boardVo" index="index" separator=",">
+			( #{boardVo.title}, #{boardVo.content}, '${userVos[index].userId}')
 		</foreach>
 	</insert>
 

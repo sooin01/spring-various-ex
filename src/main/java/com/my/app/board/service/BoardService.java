@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.my.app.board.vo.BoardVo;
+import com.my.app.board.vo.BoardWrapperVo;
 import com.my.app.common.dao.CommonDao;
+import com.my.app.user.vo.UserVo;
 
 @Service
 public class BoardService {
@@ -32,11 +34,21 @@ public class BoardService {
 	}
 
 	public int insertBoardBulk() {
+		BoardWrapperVo boardWrapperVo = new BoardWrapperVo();
+
 		List<BoardVo> boardVos = new ArrayList<>();
-		boardVos.add(new BoardVo("title1", "content1", "test"));
-		boardVos.add(new BoardVo("title2", "content2", "test"));
-		boardVos.add(new BoardVo("title3", "content3", "test"));
-		return commonDao.insert("board.insertBoardBulk", boardVos);
+		boardVos.add(new BoardVo("title1", "content1"));
+		boardVos.add(new BoardVo("title2", "content2"));
+		boardVos.add(new BoardVo("title3", "content3"));
+		boardWrapperVo.setBoardVos(boardVos);
+
+		List<UserVo> userVos = new ArrayList<>();
+		userVos.add(new UserVo("test"));
+		userVos.add(new UserVo("test"));
+		userVos.add(new UserVo("test"));
+		boardWrapperVo.setUserVos(userVos);
+
+		return commonDao.insert("board.insertBoardBulk", boardWrapperVo);
 	}
 
 }
