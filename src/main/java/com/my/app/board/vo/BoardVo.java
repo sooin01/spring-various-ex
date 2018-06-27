@@ -12,6 +12,16 @@ public class BoardVo {
 	private Timestamp createDt;
 	private Timestamp updateDt;
 
+	public BoardVo() {
+
+	}
+
+	public BoardVo(String title, String content, String userId) {
+		this.title = title;
+		this.content = content;
+		this.userId = userId;
+	}
+
 	public Integer getSeq() {
 		return seq;
 	}

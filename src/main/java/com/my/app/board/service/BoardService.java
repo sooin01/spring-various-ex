@@ -33,18 +33,9 @@ public class BoardService {
 
 	public int insertBoardBulk() {
 		List<BoardVo> boardVos = new ArrayList<>();
-		BoardVo boardVo = new BoardVo();
-		boardVo.setTitle("title1");
-		boardVo.setContent("content1");
-		boardVo.setUserId("test");
-		boardVos.add(boardVo);
-
-		boardVo = new BoardVo();
-		boardVo.setTitle("title2");
-		boardVo.setContent("content2");
-		boardVo.setUserId("test");
-		boardVos.add(boardVo);
-
+		boardVos.add(new BoardVo("title1", "content1", "test"));
+		boardVos.add(new BoardVo("title2", "content2", "test"));
+		boardVos.add(new BoardVo("title3", "content3", "test"));
 		return commonDao.insert("board.insertBoardBulk", boardVos);
 	}
 
