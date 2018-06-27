@@ -9,6 +9,14 @@
 			#{title}, #{content}, #{userId}
 		)
 	</insert>
+	
+	<insert id="insertBoardBulk" parameterType="list">
+		insert into board ( title, content, user_id )
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			( #{item.title}, #{item.content}, #{item.userId} )
+		</foreach>
+	</insert>
 
 	<select id="getBoard" parameterType="map" resultType="com.my.app.board.vo.BoardVo">
 		select seq,

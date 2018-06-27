@@ -49,10 +49,13 @@ public class SqlLogInterceptor implements Interceptor {
 				parameters.add(parameterObject);
 			} else {
 				for (ParameterMapping parameterMapping : boundSql.getParameterMappings()) {
-					Object value = PropertyUtils.getProperty(parameterObject, parameterMapping.getProperty());
+					String property = parameterMapping.getProperty();
+					Object value = null;
 
-					if (value == null) {
-						value = boundSql.getAdditionalParameter(parameterMapping.getProperty());
+					if (boundSql.hasAdditionalParameter(property)) {
+						value = boundSql.getAdditionalParameter(property);
+					} else {
+						value = PropertyUtils.getProperty(parameterObject, property);
 					}
 
 					parameters.add(value);
@@ -99,12 +102,10 @@ public class SqlLogInterceptor implements Interceptor {
 
 		long end = System.nanoTime();
 		Object count = null;
-		if (proceed instanceof List)
-		{
-		    count = ((List<?>) proceed).size();
-		} else
-		{
-		    count = proceed;
+		if (proceed instanceof List) {
+			count = ((List<?>) proceed).size();
+		} else {
+			count = proceed;
 		}
 
 		// SQL 로깅
@@ -114,7 +115,7 @@ public class SqlLogInterceptor implements Interceptor {
 		executed.append("==> Query: ").append(sql);
 		executed.append(System.lineSeparator());
 		executed.append("<== Count: ").append(count).append(" (").append("executed ")
-		    .append(TimeUnit.NANOSECONDS.toMillis(end - start)).append(" ms)");
+				.append(TimeUnit.NANOSECONDS.toMillis(end - start)).append(" ms)");
 		LoggerFactory.getLogger(ms.getId()).info(executed.toString());
 
 		return proceed;

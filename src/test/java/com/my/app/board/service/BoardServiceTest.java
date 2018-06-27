@@ -34,4 +34,10 @@ public class BoardServiceTest {
 		boardService.getBoard(1);
 	}
 
+	@Test
+	public void testInsertBoardBulk() {
+		int count = boardService.insertBoardBulk();
+		System.out.println(count);
+	}
+
 }

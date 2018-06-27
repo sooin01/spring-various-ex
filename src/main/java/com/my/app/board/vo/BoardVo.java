@@ -68,4 +68,10 @@ public class BoardVo {
 		this.updateDt = updateDt;
 	}
 
+	@Override
+	public String toString() {
+		return "BoardVo [seq=" + seq + ", title=" + title + ", content=" + content + ", userId=" + userId
+				+ ", isDelete=" + isDelete + ", createDt=" + createDt + ", updateDt=" + updateDt + "]";
+	}
+
 }

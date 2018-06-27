@@ -1,5 +1,6 @@
 package com.my.app.board.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,26 @@ public class BoardService {
 	}
 
 	public BoardVo getBoard(Integer seq) {
-		Map<String, Object> parameterMap = new HashMap<>();
-		parameterMap.put("seq", seq);
-		return commonDao.selectOne("board.getBoard", parameterMap);
+		Map<String, Object> parameter = new HashMap<>();
+		parameter.put("seq", seq);
+		return commonDao.selectOne("board.getBoard", parameter);
+	}
+
+	public int insertBoardBulk() {
+		List<BoardVo> boardVos = new ArrayList<>();
+		BoardVo boardVo = new BoardVo();
+		boardVo.setTitle("title1");
+		boardVo.setContent("content1");
+		boardVo.setUserId("test");
+		boardVos.add(boardVo);
+
+		boardVo = new BoardVo();
+		boardVo.setTitle("title2");
+		boardVo.setContent("content2");
+		boardVo.setUserId("test");
+		boardVos.add(boardVo);
+
+		return commonDao.insert("board.insertBoardBulk", boardVos);
 	}
 
 }
