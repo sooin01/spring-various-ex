@@ -20,7 +20,7 @@ boardApp.controller('boardCtrl', function($scope, $http) {
 
 	<h2>게시판 목록</h2>
 
-    <table id="boardList" style="width:100%;">
+    <table id="boardList" style="width:800px;">
         <thead>
             <tr>
                 <th>번호</th>
