@@ -21,7 +21,7 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="#{60 * 60 * 24">
+	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="#{60 * 60 * 24}">
 		<mvc:resource-chain resource-cache="false">
 			<mvc:resolvers>
 				<mvc:version-resolver>

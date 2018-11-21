@@ -3,3 +3,7 @@ if (!String.prototype.trim) {
 		return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 	};
 }
+
+function a() {
+
+}

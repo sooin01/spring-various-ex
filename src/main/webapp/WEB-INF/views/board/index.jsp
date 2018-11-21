@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/resources/lib/bootstrap-4.1.3-dist/css/bootstrap.min.css">
 <title>게시판</title>
 <script type="text/javascript" src="/resources/js/angular/angular.min.js"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/board/board.js" />"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/board/board.js' />"></script>
 <script type="text/javascript">
 var boardApp = angular.module('boardApp', []);
 boardApp.controller('boardCtrl', function($scope, $http) {
