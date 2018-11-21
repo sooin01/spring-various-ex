@@ -1,10 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="/resources/lib/bootstrap-4.1.3-dist/css/bootstrap.min.css">
 <title>게시판</title>
 <script type="text/javascript" src="/resources/js/angular/angular.min.js"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/board/board.js" />"></script>
 <script type="text/javascript">
 var boardApp = angular.module('boardApp', []);
 boardApp.controller('boardCtrl', function($scope, $http) {
@@ -16,11 +20,12 @@ boardApp.controller('boardCtrl', function($scope, $http) {
 </script>
 </head>
 <body>
-<div ng-app="boardApp" ng-controller="boardCtrl">
+
+<div ng-app="boardApp" ng-controller="boardCtrl" class="container">
 
 	<h2>게시판 목록</h2>
 
-    <table id="boardList" style="width:800px;">
+    <table id="boardList" class="table table-hover">
         <thead>
             <tr>
                 <th>번호</th>
@@ -30,7 +35,7 @@ boardApp.controller('boardCtrl', function($scope, $http) {
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in list">
+            <tr ng-repeat="item in list" class="active">
                 <td>{{item.seq}}</td>
                 <td>{{item.title}}</td>
                 <td>{{item.userId}}</td>
@@ -38,7 +43,10 @@ boardApp.controller('boardCtrl', function($scope, $http) {
             </tr>
         </tbody>
     </table>
-
 </div>
+
+<script src="/resources/js/jquery/jquery-3.3.1.min.js"></script>
+<script src="/resources/lib/bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>

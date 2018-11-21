@@ -5,9 +5,9 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:websocket="http://www.springframework.org/schema/websocket"
 	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
-		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<bean id="jsonUtil" class="com.my.app.common.util.JsonUtil" />
 
@@ -21,33 +21,41 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="3600">
+		<mvc:resource-chain resource-cache="false">
+			<mvc:resolvers>
+				<mvc:version-resolver>
+					<mvc:content-version-strategy patterns="/**" />
+				</mvc:version-resolver>
+			</mvc:resolvers>
+		</mvc:resource-chain>
+	</mvc:resources>
 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-	
+
 	<context:component-scan base-package="com.my.app" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
-	
+
 	<bean class="org.springframework.web.socket.client.standard.WebSocketContainerFactoryBean">
 		<property name="maxTextMessageBufferSize" value="8192" />
         <property name="maxBinaryMessageBufferSize" value="8192" />
 	</bean>
-	
+
 	<websocket:handlers>
 		<websocket:mapping handler="wsCommandHandler" path="/ws/command" />
 	</websocket:handlers>
-	
+
 	<websocket:message-broker application-destination-prefix="/app">
 	    <websocket:stomp-endpoint path="/stomp">
 	        <websocket:sockjs />
 	    </websocket:stomp-endpoint>
 	    <websocket:simple-broker prefix="/topic" />
 	</websocket:message-broker>
-	
+
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
@@ -56,9 +64,9 @@
 			</bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
-	
+
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 		<property name="defaultLocale" value="en_US" />
 	</bean>
-	
+
 </beans>
