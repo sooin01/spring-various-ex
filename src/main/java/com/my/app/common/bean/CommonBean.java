@@ -8,11 +8,16 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+/**
+ * BeanDefinitionRegistryPostProcessor or ImportBeanDefinitionRegistrar
+ */
 @Component
 public class CommonBean implements BeanDefinitionRegistryPostProcessor {
 
@@ -36,6 +41,13 @@ public class CommonBean implements BeanDefinitionRegistryPostProcessor {
 		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(HikariDataSource.class)
 				.addConstructorArgValue(config).getBeanDefinition();
 		registry.registerBeanDefinition("dataSource2", beanDefinition);
+
+		ClassPathScanningCandidateComponentProvider scanningCandidate = new ClassPathScanningCandidateComponentProvider(
+				false);
+		scanningCandidate.addIncludeFilter(new AnnotationTypeFilter(TestJob.class));
+		for (BeanDefinition bean : scanningCandidate.findCandidateComponents("com.my.app")) {
+			registry.registerBeanDefinition(bean.getBeanClassName(), bean);
+		}
 	}
 
 }
